@@ -171,7 +171,7 @@ export default function DashboardPage() {
     router.push('/');
   };
 
-  const upgradeToP premium = async () => {
+  const upgradeToPremium = async () => {
     const token = localStorage.getItem('token');
     try {
       const response = await fetch('/api/payment/create-checkout', {

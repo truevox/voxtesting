@@ -2,6 +2,7 @@ import { blake3 } from '@noble/hashes/blake3';
 import { sha256 } from '@noble/hashes/sha256';
 import { bytesToHex } from '@noble/hashes/utils';
 import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
 
 /**
  * Generate BLAKE3 hash from input data
@@ -89,7 +90,6 @@ export function generateAllHashes(
  * @returns Hashed password
  */
 export async function hashPassword(password: string): Promise<string> {
-  const bcrypt = require('bcryptjs');
   const salt = await bcrypt.genSalt(12);
   return bcrypt.hash(password, salt);
 }
@@ -101,7 +101,6 @@ export async function hashPassword(password: string): Promise<string> {
  * @returns True if password matches
  */
 export async function verifyPassword(password: string, hash: string): Promise<boolean> {
-  const bcrypt = require('bcryptjs');
   return bcrypt.compare(password, hash);
 }
 

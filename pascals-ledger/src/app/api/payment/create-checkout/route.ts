@@ -3,7 +3,11 @@ import Stripe from 'stripe';
 import { query } from '@/lib/db';
 import { verifyToken, extractTokenFromHeader } from '@/lib/auth';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error('STRIPE_SECRET_KEY environment variable is required');
+}
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: '2024-11-20.acacia',
 });
 

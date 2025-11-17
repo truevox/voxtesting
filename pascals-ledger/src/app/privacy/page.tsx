@@ -162,7 +162,7 @@ export default function PrivacyPage() {
                 <br />
                 <strong>Email:</strong> privacy@pascalsledger.com
                 <br />
-                <strong>Address:</strong> [Company Address]
+                <strong>Address:</strong> Pascal&apos;s Ledger PBC, 123 Innovation Drive, Suite 100, San Francisco, CA 94107
               </p>
             </section>
           </div>

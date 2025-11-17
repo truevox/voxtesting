@@ -3,11 +3,19 @@ import Stripe from 'stripe';
 import { query } from '@/lib/db';
 import { v4 as uuidv4 } from 'uuid';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error('STRIPE_SECRET_KEY environment variable is required');
+}
+
+if (!process.env.STRIPE_WEBHOOK_SECRET) {
+  throw new Error('STRIPE_WEBHOOK_SECRET environment variable is required');
+}
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: '2024-11-20.acacia',
 });
 
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
+const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 export async function POST(request: NextRequest) {
   try {

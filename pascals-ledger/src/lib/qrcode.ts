@@ -44,7 +44,10 @@ export async function generateQRCodeSVG(data: string): Promise<string> {
  * Generate verification URL for a hash
  */
 export function generateVerificationURL(hashId: string): string {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
+  if (!baseUrl) {
+    throw new Error('NEXT_PUBLIC_APP_URL environment variable is required');
+  }
   return `${baseUrl}/verify/${hashId}`;
 }
 

@@ -104,10 +104,13 @@ export default function VerifyPage({ params }: { params: { hashId: string } }) {
               <h2 className="text-2xl font-bold mb-4">QR Code</h2>
               <div className="bg-white p-4 rounded-lg">
                 {data?.qrCodeUrl && (
-                  <img
+                  <Image
                     src={data.qrCodeUrl}
                     alt="Hash QR Code"
+                    width={512}
+                    height={512}
                     className="w-full h-auto"
+                    unoptimized
                   />
                 )}
               </div>

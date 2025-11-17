@@ -11,12 +11,10 @@ export async function GET(
     // Fetch hash data (no authentication required - public verification)
     const result = await query(
       `SELECT
-        h.id, h.blake3_hash, h.sha256_hash, h.sphincs_signature,
-        h.timestamp, h.entropy_metadata, h.qr_code_url, h.created_at,
-        u.email
-       FROM hashes h
-       JOIN users u ON h.user_id = u.id
-       WHERE h.id = $1`,
+        id, blake3_hash, sha256_hash, sphincs_signature,
+        timestamp, entropy_metadata, qr_code_url, created_at
+       FROM hashes
+       WHERE id = $1`,
       [hashId]
     );
 
@@ -29,7 +27,7 @@ export async function GET(
 
     const hash = result.rows[0];
 
-    // Return hash data (excluding user's email for privacy)
+    // Return hash data
     return NextResponse.json({
       success: true,
       hash: {

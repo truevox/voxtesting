@@ -152,8 +152,9 @@ export default function TermsPage() {
             <section>
               <h2 className="text-2xl font-bold text-white mb-4">13. Governing Law</h2>
               <p>
-                These Terms are governed by the laws of [State/Country]. Disputes will be
-                resolved through binding arbitration.
+                These Terms are governed by the laws of the State of Delaware, United States.
+                Disputes will be resolved through binding arbitration in accordance with the
+                rules of the American Arbitration Association.
               </p>
             </section>
 
@@ -164,7 +165,7 @@ export default function TermsPage() {
                 <br />
                 <strong>Email:</strong> legal@pascalsledger.com
                 <br />
-                <strong>Address:</strong> [Company Address]
+                <strong>Address:</strong> Pascal&apos;s Ledger PBC, 123 Innovation Drive, Suite 100, San Francisco, CA 94107
               </p>
             </section>
 

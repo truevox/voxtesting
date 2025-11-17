@@ -37,7 +37,15 @@ export async function POST(request: NextRequest) {
       [email.toLowerCase()]
     );
 
-    if (result.rows.length === 0) {
+    // Timing attack mitigation: always perform password comparison
+    // Use a dummy hash if user doesn't exist to maintain consistent timing
+    const dummyHash = '$2a$12$dummyhashtopreventtimingattacksxxxxxxxxxxxxxxxxxxxxxxxxxx';
+    const userHash = result.rows.length > 0 ? result.rows[0].password_hash : dummyHash;
+
+    const isPasswordValid = await verifyPassword(password, userHash);
+
+    // Check if user exists AND password is valid
+    if (result.rows.length === 0 || !isPasswordValid) {
       return NextResponse.json(
         { success: false, error: 'Invalid credentials' },
         { status: 401 }
@@ -45,15 +53,6 @@ export async function POST(request: NextRequest) {
     }
 
     const user = result.rows[0];
-
-    // Verify password
-    const isPasswordValid = await verifyPassword(password, user.password_hash);
-    if (!isPasswordValid) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid credentials' },
-        { status: 401 }
-      );
-    }
 
     // Generate JWT token
     const token = generateToken({
