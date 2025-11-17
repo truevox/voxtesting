@@ -2,7 +2,7 @@
 
 ## Quick Deploy
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/truevox/voxtesting)
+> **Note:** When deploying from the repository, set the **Base directory** to `pascals-ledger` in Netlify's build settings.
 
 ## Prerequisites
 
@@ -46,8 +46,8 @@ CREATE TABLE users (
   email VARCHAR(255) UNIQUE NOT NULL,
   password_hash VARCHAR(255) NOT NULL,
   tier VARCHAR(20) DEFAULT 'standard' CHECK (tier IN ('standard', 'premium')),
-  created_at TIMESTAMP DEFAULT NOW(),
-  subscription_end_date TIMESTAMP NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  subscription_end_date TIMESTAMPTZ NULL,
   pec_enabled BOOLEAN DEFAULT FALSE,
   stripe_customer_id VARCHAR(255) NULL,
   stripe_subscription_id VARCHAR(255) NULL
@@ -60,11 +60,11 @@ CREATE TABLE hashes (
   blake3_hash VARCHAR(64) NOT NULL,
   sha256_hash VARCHAR(64) NOT NULL,
   sphincs_signature TEXT NULL,
-  timestamp TIMESTAMP NOT NULL,
+  timestamp TIMESTAMPTZ NOT NULL,
   entropy_metadata JSONB NOT NULL,
   qr_code_url TEXT NOT NULL,
   public_verification_url TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- PEC Rolling Hashes table
@@ -76,7 +76,7 @@ CREATE TABLE pec_rolling_hashes (
   current_sha256 VARCHAR(64) NOT NULL,
   current_sphincs TEXT NOT NULL,
   sensor_data JSONB NOT NULL,
-  updated_at TIMESTAMP DEFAULT NOW()
+  updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Hash storage locations table
@@ -85,7 +85,7 @@ CREATE TABLE hash_storage_locations (
   hash_id UUID REFERENCES hashes(id) ON DELETE CASCADE,
   storage_type VARCHAR(50) NOT NULL,
   storage_url TEXT NOT NULL,
-  stored_at TIMESTAMP DEFAULT NOW(),
+  stored_at TIMESTAMPTZ DEFAULT NOW(),
   status VARCHAR(20) DEFAULT 'active' CHECK (status IN ('active', 'pending', 'failed'))
 );
 
@@ -98,7 +98,7 @@ CREATE TABLE payment_transactions (
   currency VARCHAR(3) DEFAULT 'USD',
   tier VARCHAR(20) NOT NULL,
   status VARCHAR(20) NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Create indexes
@@ -153,9 +153,9 @@ DATABASE_URL=postgresql://user:password@host.neon.tech/database?sslmode=require
 JWT_SECRET=your-super-secret-jwt-key-64-characters-minimum-change-this
 
 # Stripe (from Stripe Dashboard)
-STRIPE_SECRET_KEY=sk_live_your_stripe_secret_key
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_your_stripe_publishable_key
-STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
+STRIPE_SECRET_KEY=your_stripe_secret_key
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
 
 # Application URL (your Netlify domain)
 NEXT_PUBLIC_APP_URL=https://your-site.netlify.app

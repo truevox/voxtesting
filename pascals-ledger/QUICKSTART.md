@@ -25,12 +25,12 @@ CREATE TABLE users (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   email VARCHAR(255) UNIQUE NOT NULL,
   password_hash VARCHAR(255) NOT NULL,
-  tier VARCHAR(20) DEFAULT 'standard',
-  created_at TIMESTAMP DEFAULT NOW(),
-  subscription_end_date TIMESTAMP NULL,
+  tier VARCHAR(20) DEFAULT 'standard' CHECK (tier IN ('standard', 'premium')),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  subscription_end_date TIMESTAMPTZ NULL,
   pec_enabled BOOLEAN DEFAULT FALSE,
-  stripe_customer_id VARCHAR(255),
-  stripe_subscription_id VARCHAR(255)
+  stripe_customer_id VARCHAR(255) NULL,
+  stripe_subscription_id VARCHAR(255) NULL
 );
 
 CREATE TABLE hashes (
@@ -38,12 +38,12 @@ CREATE TABLE hashes (
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   blake3_hash VARCHAR(64) NOT NULL,
   sha256_hash VARCHAR(64) NOT NULL,
-  sphincs_signature TEXT,
-  timestamp TIMESTAMP NOT NULL,
+  sphincs_signature TEXT NULL,
+  timestamp TIMESTAMPTZ NOT NULL,
   entropy_metadata JSONB NOT NULL,
   qr_code_url TEXT NOT NULL,
   public_verification_url TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 CREATE TABLE pec_rolling_hashes (
@@ -54,7 +54,7 @@ CREATE TABLE pec_rolling_hashes (
   current_sha256 VARCHAR(64) NOT NULL,
   current_sphincs TEXT NOT NULL,
   sensor_data JSONB NOT NULL,
-  updated_at TIMESTAMP DEFAULT NOW()
+  updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 CREATE TABLE hash_storage_locations (
@@ -62,19 +62,19 @@ CREATE TABLE hash_storage_locations (
   hash_id UUID REFERENCES hashes(id) ON DELETE CASCADE,
   storage_type VARCHAR(50) NOT NULL,
   storage_url TEXT NOT NULL,
-  stored_at TIMESTAMP DEFAULT NOW(),
-  status VARCHAR(20) DEFAULT 'active'
+  stored_at TIMESTAMPTZ DEFAULT NOW(),
+  status VARCHAR(20) DEFAULT 'active' CHECK (status IN ('active', 'pending', 'failed'))
 );
 
 CREATE TABLE payment_transactions (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-  stripe_payment_intent_id VARCHAR(255),
+  stripe_payment_intent_id VARCHAR(255) NULL,
   amount INTEGER NOT NULL,
   currency VARCHAR(3) DEFAULT 'USD',
   tier VARCHAR(20) NOT NULL,
   status VARCHAR(20) NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 CREATE INDEX idx_users_email ON users(email);
@@ -102,9 +102,14 @@ Click "Run" ✅
 
 ## 4️⃣ Deploy to Netlify (1 minute)
 
-### Option A: One Click Deploy
+### Option A: Netlify UI Deploy
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/truevox/voxtesting)
+1. Go to [Netlify](https://app.netlify.com)
+2. Click "Add new site" → "Import an existing project"
+3. Connect your repository
+4. Set **Base directory** to `pascals-ledger`
+5. Build command: `npm run build`
+6. Publish directory: `.next`
 
 ### Option B: Manual Deploy
 
@@ -143,7 +148,7 @@ node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 ```env
 STRIPE_SECRET_KEY=your_stripe_test_secret_key
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_test_publishable_key
-STRIPE_WEBHOOK_SECRET=your_webhook_secret_from_stripe_cli_or_dashboard
+STRIPE_WEBHOOK_SECRET=your_webhook_secret_from_stripe
 ```
 
 ## 6️⃣ Redeploy
