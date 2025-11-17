@@ -141,9 +141,9 @@ node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 ### OPTIONAL (For payments)
 
 ```env
-STRIPE_SECRET_KEY=sk_test_...
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
-STRIPE_WEBHOOK_SECRET=whsec_... (get after setting up webhook)
+STRIPE_SECRET_KEY=your_stripe_test_secret_key
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_test_publishable_key
+STRIPE_WEBHOOK_SECRET=your_webhook_secret_from_stripe_cli_or_dashboard
 ```
 
 ## 6️⃣ Redeploy
