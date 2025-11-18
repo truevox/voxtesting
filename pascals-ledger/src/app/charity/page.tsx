@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import TestingBanner from '@/components/TestingBanner';
 
 export default function CharityPage() {
   const charities = [
@@ -61,6 +62,8 @@ export default function CharityPage() {
           </Link>
         </div>
       </nav>
+
+      <TestingBanner />
 
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-6xl mx-auto">

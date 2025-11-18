@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import TestingBanner from '@/components/TestingBanner';
 
 interface Hash {
   id: string;
@@ -222,6 +223,8 @@ export default function DashboardPage() {
           </div>
         </div>
       </nav>
+
+      <TestingBanner />
 
       <div className="container mx-auto px-4 py-8">
         {/* Tier Upgrade Banner */}
