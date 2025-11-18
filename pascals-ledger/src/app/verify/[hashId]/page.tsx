@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { use, useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -16,18 +16,19 @@ interface VerificationData {
   verified: boolean;
 }
 
-export default function VerifyPage({ params }: { params: { hashId: string } }) {
+export default function VerifyPage({ params }: { params: Promise<{ hashId: string }> }) {
+  const { hashId } = use(params);
   const [data, setData] = useState<VerificationData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
     fetchVerificationData();
-  }, [params.hashId]);
+  }, [hashId]);
 
   const fetchVerificationData = async () => {
     try {
-      const response = await fetch(`/api/verify/${params.hashId}`);
+      const response = await fetch(`/api/verify/${hashId}`);
       const result = await response.json();
 
       if (result.success) {
