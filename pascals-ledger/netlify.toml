@@ -21,3 +21,4 @@
 # NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 # NEXT_PUBLIC_APP_URL
 # OPENWEATHER_API_KEY
+# NEXT_PUBLIC_TESTING_MODE - Set to 'false' to hide testing banners (default: shows banner)
