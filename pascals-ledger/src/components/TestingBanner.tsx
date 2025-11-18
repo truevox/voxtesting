@@ -12,7 +12,7 @@
 
 export default function TestingBanner() {
   // Default to true (show banner) unless explicitly set to 'false'
-  const isTestingMode = process.env.NEXT_PUBLIC_TESTING_MODE !== 'false';
+  const isTestingMode = process.env.NEXT_PUBLIC_TESTING_MODE?.toLowerCase() !== 'false';
 
   if (!isTestingMode) {
     return null;
