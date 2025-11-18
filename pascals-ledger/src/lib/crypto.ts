@@ -1,6 +1,6 @@
-import { blake3 } from '@noble/hashes/blake3';
-import { sha256 } from '@noble/hashes/sha256';
-import { bytesToHex } from '@noble/hashes/utils';
+import { blake3 } from '@noble/hashes/blake3.js';
+import { sha256 } from '@noble/hashes/sha2.js';
+import { bytesToHex } from '@noble/hashes/utils.js';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 

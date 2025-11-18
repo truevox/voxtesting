@@ -12,7 +12,7 @@ if (!process.env.STRIPE_WEBHOOK_SECRET) {
 }
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2024-11-20.acacia',
+  apiVersion: '2025-10-29.clover',
 });
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
           const subscription = await stripe.subscriptions.retrieve(
             session.subscription as string
           );
-          const endDate = new Date(subscription.current_period_end * 1000);
+          const endDate = new Date(subscription.items.data[0].current_period_end * 1000);
 
           await query(
             `UPDATE users
@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
           const userId = userResult.rows[0].id;
 
           if (subscription.status === 'active') {
-            const endDate = new Date(subscription.current_period_end * 1000);
+            const endDate = new Date(subscription.items.data[0].current_period_end * 1000);
             await query(
               `UPDATE users
                SET tier = 'premium',
