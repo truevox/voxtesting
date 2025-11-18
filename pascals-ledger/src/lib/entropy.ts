@@ -106,6 +106,20 @@ export async function generateEntropyMetadata(
     location = {
       city: options.city,
     };
+  } else {
+    // Fallback to IP-based geolocation
+    const ipLocation = await getIPLocation();
+    if (ipLocation) {
+      weather = await fetchWeatherData(ipLocation.lat, ipLocation.lon);
+      location = {
+        city: ipLocation.city,
+        country: ipLocation.country,
+        coordinates: {
+          lat: ipLocation.lat,
+          lon: ipLocation.lon,
+        },
+      };
+    }
   }
 
   const metadata: EntropyMetadata = {

@@ -156,16 +156,21 @@ export default function VerifyPage({ params }: { params: Promise<{ hashId: strin
                     Environmental Entropy
                   </h3>
                   <div className="text-sm text-blue-200">
-                    {data?.entropyMetadata?.weather && (
+                    {data?.entropyMetadata?.weather ? (
                       <p>
                         Weather: {data.entropyMetadata.weather.temperature}°C,{' '}
                         {data.entropyMetadata.weather.conditions}
                       </p>
-                    )}
-                    {data?.entropyMetadata?.location && (
+                    ) : null}
+                    {data?.entropyMetadata?.location ? (
                       <p>
-                        Location: {data.entropyMetadata.location.city},{' '}
-                        {data.entropyMetadata.location.country}
+                        Location: {data.entropyMetadata.location.city}
+                        {data.entropyMetadata.location.country && `, ${data.entropyMetadata.location.country}`}
+                      </p>
+                    ) : null}
+                    {!data?.entropyMetadata?.weather && !data?.entropyMetadata?.location && (
+                      <p className="text-slate-400 italic">
+                        No environmental data collected for this hash
                       </p>
                     )}
                   </div>
