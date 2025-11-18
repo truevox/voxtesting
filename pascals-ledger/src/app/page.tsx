@@ -24,6 +24,21 @@ export default function HomePage() {
         </div>
       </nav>
 
+      {/* TESTING BANNER */}
+      <div className="bg-red-600 border-y-4 border-yellow-400 py-6">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <div className="text-4xl mb-2">⚠️ TESTING MODE ⚠️</div>
+            <div className="text-2xl font-bold mb-2">
+              ALL FINANCIAL DATA IS FOR INTERNAL TESTING ONLY
+            </div>
+            <div className="text-xl">
+              Numbers will be zeroed on launch when we open for orders
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 text-center">
         <h2 className="text-5xl md:text-6xl font-bold mb-6">
