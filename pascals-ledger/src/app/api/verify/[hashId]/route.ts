@@ -3,10 +3,10 @@ import { query } from '@/lib/db';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { hashId: string } }
+  { params }: { params: Promise<{ hashId: string }> }
 ) {
   try {
-    const { hashId } = params;
+    const { hashId } = await params;
 
     // Fetch hash data (no authentication required - public verification)
     const result = await query(
