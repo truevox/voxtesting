@@ -155,7 +155,7 @@ export default function VerifyPage({ params }: { params: Promise<{ hashId: strin
                   <h3 className="text-sm font-semibold text-blue-300 mb-1">
                     Environmental Entropy
                   </h3>
-                  <div className="text-sm text-blue-200">
+                  <div className="text-sm text-blue-200 space-y-1">
                     {data?.entropyMetadata?.weather ? (
                       <p>
                         Weather: {data.entropyMetadata.weather.temperature}°C,{' '}
@@ -163,10 +163,18 @@ export default function VerifyPage({ params }: { params: Promise<{ hashId: strin
                       </p>
                     ) : null}
                     {data?.entropyMetadata?.location ? (
-                      <p>
-                        Location: {data.entropyMetadata.location.city}
-                        {data.entropyMetadata.location.country && `, ${data.entropyMetadata.location.country}`}
-                      </p>
+                      <>
+                        <p>
+                          Location: {data.entropyMetadata.location.city}
+                          {data.entropyMetadata.location.country && `, ${data.entropyMetadata.location.country}`}
+                        </p>
+                        {data.entropyMetadata.location.coordinates && (
+                          <p className="text-slate-400 text-xs">
+                            Approx. coordinates: {Math.floor(data.entropyMetadata.location.coordinates.lat)}°, {Math.floor(data.entropyMetadata.location.coordinates.lon)}°
+                            <span className="italic"> (truncated for privacy - precise coordinates used in hash)</span>
+                          </p>
+                        )}
+                      </>
                     ) : null}
                     {!data?.entropyMetadata?.weather && !data?.entropyMetadata?.location && (
                       <p className="text-slate-400 italic">
