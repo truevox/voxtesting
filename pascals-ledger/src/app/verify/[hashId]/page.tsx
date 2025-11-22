@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { use, useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -16,18 +16,19 @@ interface VerificationData {
   verified: boolean;
 }
 
-export default function VerifyPage({ params }: { params: { hashId: string } }) {
+export default function VerifyPage({ params }: { params: Promise<{ hashId: string }> }) {
+  const { hashId } = use(params);
   const [data, setData] = useState<VerificationData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
     fetchVerificationData();
-  }, [params.hashId]);
+  }, [hashId]);
 
   const fetchVerificationData = async () => {
     try {
-      const response = await fetch(`/api/verify/${params.hashId}`);
+      const response = await fetch(`/api/verify/${hashId}`);
       const result = await response.json();
 
       if (result.success) {
@@ -154,17 +155,30 @@ export default function VerifyPage({ params }: { params: { hashId: string } }) {
                   <h3 className="text-sm font-semibold text-blue-300 mb-1">
                     Environmental Entropy
                   </h3>
-                  <div className="text-sm text-blue-200">
-                    {data?.entropyMetadata?.weather && (
+                  <div className="text-sm text-blue-200 space-y-1">
+                    {data?.entropyMetadata?.weather ? (
                       <p>
                         Weather: {data.entropyMetadata.weather.temperature}°C,{' '}
                         {data.entropyMetadata.weather.conditions}
                       </p>
-                    )}
-                    {data?.entropyMetadata?.location && (
-                      <p>
-                        Location: {data.entropyMetadata.location.city},{' '}
-                        {data.entropyMetadata.location.country}
+                    ) : null}
+                    {data?.entropyMetadata?.location ? (
+                      <>
+                        <p>
+                          Location: {data.entropyMetadata.location.city}
+                          {data.entropyMetadata.location.country && `, ${data.entropyMetadata.location.country}`}
+                        </p>
+                        {data.entropyMetadata.location.coordinates && (
+                          <p className="text-slate-400 text-xs">
+                            Approx. coordinates: {Math.floor(data.entropyMetadata.location.coordinates.lat)}°, {Math.floor(data.entropyMetadata.location.coordinates.lon)}°
+                            <span className="italic"> (truncated for privacy - precise coordinates used in hash)</span>
+                          </p>
+                        )}
+                      </>
+                    ) : null}
+                    {!data?.entropyMetadata?.weather && !data?.entropyMetadata?.location && (
+                      <p className="text-slate-400 italic">
+                        No environmental data collected for this hash
                       </p>
                     )}
                   </div>
